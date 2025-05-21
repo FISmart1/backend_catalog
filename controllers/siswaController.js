@@ -84,20 +84,22 @@ const filterFile = (req, file, cb) => {
 const post = multer({ penympanan, filterFile });
 
 
-exports.getSiswaByAngkatan = async (req, res) => {
-  const { angkatan } = req.params;
+export const getSiswaByAngkatan = async (req, res) => {
+  const { angkatan } = req.query; // gunakan req.query di Vercel API routes
   try {
-    const [rows] = await pool.query('SELECT * FROM db_siswa WHERE angkatan = ?', [angkatan]);
+    const [rows] = await pool.query(
+      "SELECT * FROM db_siswa WHERE angkatan = ?",
+      [angkatan]
+    );
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.getProjectById = async (req, res) => {
-  const { id } = req.params;
+exports.getProjectAll = async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM project WHERE id = ?', [id]);
+    const [rows] = await pool.query('SELECT * FROM project');
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });

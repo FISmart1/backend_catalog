@@ -8,7 +8,7 @@ router.post('/siswa', upload.fields([
   { name: 'foto', maxCount: 1 },
   { name: 'cv', maxCount: 1 }
 ]), siswaController.addSiswa);
-router.get('/project/:id', siswaController.getProjectById);
+router.get('/projects/', siswaController.getProjectAll);
  // Sesuaikan path
 
 // Upload foto dan CV saat tambah project
