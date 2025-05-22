@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 app.use('/api', siswaRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const PORT = 3001;
+const PORT = 3006;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
