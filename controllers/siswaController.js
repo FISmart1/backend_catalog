@@ -33,11 +33,12 @@ exports.addSiswa = async (req, res) => {
   try {
     
     await pool.query(
-      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, portofolio_foto, deskripsi, posisi, instansi, skill, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
-      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, portofolio_foto, deskripsi, posisi, instansi, skill, linkedin || '']
+      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
+      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin || '']
     );
     res.json({ message: 'Siswa berhasil ditambahkan', id });
   } catch (err) {
+    console.error(err)
     res.status(500).json({ error: err.message });
   }
 };
@@ -58,7 +59,6 @@ exports.updateSiswa = async (req, res) => {
 
   // Cek file jika ada perubahan
   const foto = req.files?.foto ? req.files.foto[0].filename : null;
-  const portofolio_foto = req.files?.portofolio_foto ? req.files.portofolio_foto[0].filename : null;
   const cv = req.files?.cv ? req.files.cv[0].filename : null;
 
   try {
@@ -73,10 +73,10 @@ exports.updateSiswa = async (req, res) => {
     // Gunakan file baru jika ada, kalau tidak pakai file lama
     const updatedFoto = foto || oldData.foto;
     const updatedCV = cv || oldData.cv;
-    const updatedPortoFoto = portofolio_foto || oldData.portofolio_foto;
+
 
     await pool.query(
-      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, portofolio_foto = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?
+      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?
        WHERE id = ?`,
       [
         id,
@@ -87,7 +87,6 @@ exports.updateSiswa = async (req, res) => {
         updatedCV,
         updatedFoto,
         alamat,
-        updatedPortoFoto,
         deskripsi,
         posisi,
         instansi,
