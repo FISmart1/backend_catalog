@@ -18,7 +18,7 @@ app.use(express.json());
 const initDatabase = async () => {
   try {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: '127.0.0.1',
       user: 'root',
       password: '', // ganti jika ada
       multipleStatements: true,
@@ -37,7 +37,7 @@ const initDatabase = async () => {
     console.log('✅ Database dan tabel berhasil dibuat/di-cek.');
     await connection.end();
   } catch (err) {
-    console.error('❌ Gagal inisialisasi database:', err.message);
+    console.error('❌ Gagal inisialisasi database:', err.message, err.code);
   }
 };
 

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
+console.log('Coba konek ke DB dengan host:', process.env.DB_HOST);
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || '127.0.0.1',
