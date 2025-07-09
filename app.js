@@ -19,8 +19,8 @@ const initDatabase = async () => {
   try {
     const connection = await mysql.createConnection({
       host: '127.0.0.1',
-      user: 'root',
-      password: '', // ganti jika ada
+      user: 'best',
+      password: '12345678', // ganti jika ada
       multipleStatements: true,
     });
 
