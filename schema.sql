@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS db_siswa (
   linkedin TEXT,
   password VARCHAR(50) DEFAULT 'smktibazma123',
   email VARCHAR(50),
-  telepon VARCHAR(20),
+  telepon VARCHAR(20)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
