@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 
 // Filter untuk validasi file
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'image/jpg'];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -26,15 +26,15 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 exports.addSiswa = async (req, res) => {
-  const {id, name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin } = req.body;
+  const {id, name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon } = req.body;
   const foto = req.files.foto ? req.files.foto[0].filename : null;
   const portofolio_foto = req.files.portofolio_foto ? req.files.portofolio_foto[0].filename : null;
   const cv = req.files.cv ? req.files.cv[0].filename : null;
   try {
     
     await pool.query(
-      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
-      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin || '']
+      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
+      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon || '']
     );
     res.json({ message: 'Siswa berhasil ditambahkan', id });
   } catch (err) {
@@ -55,7 +55,7 @@ exports.deleteSiswa = async (req, res) => {
 }
 exports.updateSiswa = async (req, res) => {
   const { id } = req.params;
-  const { name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin } = req.body;
+  const { name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, password } = req.body;
 
   // Cek file jika ada perubahan
   const foto = req.files?.foto ? req.files.foto[0].filename : null;
@@ -76,7 +76,7 @@ exports.updateSiswa = async (req, res) => {
 
 
     await pool.query(
-      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?
+      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?, status = ?, email = ?, telepon = ?, password = ?
        WHERE id = ?`,
       [
         id,
@@ -91,7 +91,11 @@ exports.updateSiswa = async (req, res) => {
         posisi,
         instansi,
         skill,
-        linkedin || '',
+        linkedin,
+        status,
+        email,
+        telepon,
+        password || '',
         id,
       ]
     );

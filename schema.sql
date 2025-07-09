@@ -22,7 +22,10 @@ CREATE TABLE IF NOT EXISTS db_siswa (
   instansi VARCHAR(20),
   skill TEXT,
   linkedin TEXT,
-  password VARCHAR(50) DEFAULT 'smktibazma123'
+  password VARCHAR(50) DEFAULT 'smktibazma123',
+  email VARCHAR(50),
+  telepon VARCHAR(20),
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS pengalaman (
