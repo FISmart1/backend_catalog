@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS db_siswa (
   skill TEXT,
   linkedin TEXT,
   password VARCHAR(50) DEFAULT 'smktibazma123',
+  status VARCHAR(20),
   email VARCHAR(50),
   telepon VARCHAR(20)
   
