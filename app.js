@@ -15,37 +15,7 @@ app.use(express.json());
 // ===========================
 // ✅ Auto Create DB & Table
 // ===========================
-const initDatabase = async () => {
-  try {
-    const connection = await mysql.createConnection({
-      host: '127.0.0.1',
-      user: 'root',
-      password: '', // ganti jika ada
-      multipleStatements: true,
-    });
 
-    // 1. Buat database jika belum ada
-    await connection.query(`CREATE DATABASE IF NOT EXISTS db_bazma`);
-
-    // 2. Gunakan database tersebut
-    await connection.query(`USE db_bazma`);
-
-    // 3. Baca dan jalankan isi schema.sql
-    const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
-    await connection.query(schema);
-
-    console.log('✅ Database dan tabel berhasil dibuat/di-cek.');
-    await connection.end();
-  } catch (err) {
-    console.error('❌ Gagal inisialisasi database:', err.message, err.code);
-  }
-};
-
-
-// ===========================
-// ✅ Jalankan Init DB saat start
-// ===========================
-initDatabase();
 
 // ===========================
 // ✅ Routing & API
