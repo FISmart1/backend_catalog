@@ -1,5 +1,7 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+require('dotenv').config(); // Load .env file
+
+const mysql = require('mysql2/promise'); // Menggunakan promise pool
+
 console.log('Coba konek ke DB dengan host:', process.env.DB_HOST);
 
 const pool = mysql.createPool({
@@ -8,6 +10,17 @@ const pool = mysql.createPool({
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'db_bazma',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
+
+pool.getConnection()
+  .then(() => {
+    console.log("✅ Berhasil konek ke MySQL!");
+  })
+  .catch((err) => {
+    console.error("❌ Gagal konek ke MySQL:", err.message);
+  });
 
 module.exports = pool;
