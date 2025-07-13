@@ -26,15 +26,15 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 exports.addSiswa = async (req, res) => {
-  const {id, name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon } = req.body;
+  const {id, name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, hafalan } = req.body;
   const foto = req.files.foto ? req.files.foto[0].filename : null;
   const portofolio_foto = req.files.portofolio_foto ? req.files.portofolio_foto[0].filename : null;
   const cv = req.files.cv ? req.files.cv[0].filename : null;
   try {
     
     await pool.query(
-      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
-      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon || '']
+      'INSERT INTO db_siswa (id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, hafalan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)',
+      [id, name, angkatan, keahlian, link_porto, cv, foto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, hafalan || '']
     );
     res.json({ message: 'Siswa berhasil ditambahkan', id });
   } catch (err) {
@@ -55,7 +55,7 @@ exports.deleteSiswa = async (req, res) => {
 }
 exports.updateSiswa = async (req, res) => {
   const { id } = req.params;
-  const { name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, password } = req.body;
+  const { name, angkatan, keahlian, link_porto, alamat, deskripsi, posisi, instansi, skill, linkedin, status, email, telepon, password, hafalan } = req.body;
 
   // Cek file jika ada perubahan
   const foto = req.files?.foto ? req.files.foto[0].filename : null;
@@ -76,7 +76,7 @@ exports.updateSiswa = async (req, res) => {
 
 
     await pool.query(
-      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?, status = ?, email = ?, telepon = ?, password = ?
+      `UPDATE db_siswa SET id = ?,  name = ?, angkatan = ?, keahlian = ?, link_porto = ?, cv = ?, foto = ?, alamat = ?, deskripsi = ?, posisi =?, instansi = ?, skill = ?, linkedin = ?, status = ?, email = ?, telepon = ?, password = ?, hafalan = ?
        WHERE id = ?`,
       [
         id,
@@ -95,7 +95,8 @@ exports.updateSiswa = async (req, res) => {
         status,
         email,
         telepon,
-        password || '',
+        password, 
+        hafalan || '',
         id,
       ]
     );
@@ -685,6 +686,44 @@ exports.updatePengalamanPending = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.createTestimoni = async (req, res) => {
+  const { nama, instansi, pesan } = req.body;
+
+  if (!nama || !instansi || !pesan) {
+    return res.status(400).json({ error: "Semua field wajib diisi." });
+  }
+
+  try {
+    const [result] = await pool.query(
+      "INSERT INTO testimoni (nama, instansi, pesan) VALUES (?, ?, ?)",
+      [nama, instansi, pesan]
+    );
+
+    res.status(201).json({
+      id: result.insertId,
+      nama,
+      instansi,
+      pesan,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getAllTestimoni = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM testimoni ORDER BY created_at DESC"
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
 
 //admin
 

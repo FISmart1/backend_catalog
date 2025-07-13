@@ -82,7 +82,8 @@ router.put('/approve_pengalaman/:id', siswaController.approvePengalamanPending);
 router.delete('/delpengalaman-pending/:id', siswaController.deletePengalamanPending);
 router.put("/update_pengalaman_pending/:id", siswaController.updatePengalamanPending);
 router.post('/verify-password', siswaController.verifyPassword); // POST untuk verifikasi password admin
-
+router.post("/testimoni", siswaController.createTestimoni);
+router.get("/testimoni", siswaController.getAllTestimoni);
  // Sesuaikan path
 
 router.post('/login', siswaController.adminLogin); // POST agar kirim nis & password
